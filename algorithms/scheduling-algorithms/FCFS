@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    vector<int> pid; // Vector for process IDs
+    vector<int> bt;  // Vector for burst times
+    int n;
+
+    cout << "Enter the number of processes: ";
+    cin >> n;
+
+    pid.resize(n); // Resize vector for process IDs
+    bt.resize(n);  // Resize vector for burst times
+
+    cout << "Enter process IDs of all the processes: ";
+    for (int i = 0; i < n; i++) {
+        cin >> pid[i];
+    }
+
+    cout << "Enter burst times of all the processes: ";
+    for (int i = 0; i < n; i++) {
+        cin >> bt[i];
+    }
+
+    vector<int> wt(n); // Waiting time vector
+    wt[0] = 0; // First process has no waiting time
+
+    // Calculating waiting time of each process
+    for (int i = 1; i < n; i++) {
+        wt[i] = bt[i - 1] + wt[i - 1];
+    }
+
+    cout << "\nProcess ID\tBurst Time\tWaiting Time\tTurnaround Time\n";
+
+    float twt = 0.0; // Total waiting time
+    float tat = 0.0; // Total turnaround time
+
+    for (int i = 0; i < n; i++) {
+        int turnaround_time = bt[i] + wt[i];
+        cout << pid[i] << "\t\t" << bt[i] << "\t\t" << wt[i] << "\t\t" << turnaround_time << endl;
+        
+        // Calculating total waiting time
+        twt += wt[i];
+        // Calculating total turnaround time
+        tat += turnaround_time; 
+    }
+
+    // Calculating average waiting time
+    float awt = twt / n;
+    // Calculating average turnaround time
+    float att = tat / n;
+
+    cout << "\nAvg. waiting time = " << awt << endl;
+    cout << "Avg. turnaround time = " << att << endl;
+
+    return 0;
+}
